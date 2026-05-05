@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+{% block title %}Bio-Corpus - Plateforme Biomédicale Intelligente{% endblock %}
+
+{% block content %}
+<!-- HERO SECTION -->
+<section class="hero-home">
+  <div class="container">
+    <div class="hero-content">
+      <h1 class="hero-title">Découvrez la Science Biomédicale</h1>
+      <p class="hero-subtitle">Accédez à des milliers d'articles scientifiques de qualité de PubMed, PMC et Semantic Scholar</p>
+      <div class="hero-cta">
+        <a href="/articles/" class="btn btn-primary btn-lg">🔍 Explore les Articles</a>
+        {% if not user.is_authenticated %}
+          <a href="/users/signup/" class="btn btn-outline-primary btn-lg">📝 S'inscrire</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES SECTION -->
+<section class="features-section py-5">
+  <div class="container">
+    <div class="text-center mb-5">
+      <h2 class="section-title">Pourquoi Bio-Corpus ?</h2>
+      <p class="section-subtitle">Une plateforme complète pour la recherche scientifique</p>
+    </div>
+    
+    <div class="row g-4">
+      <!-- Feature 1 -->
+      <div class="col-lg-4 col-md-6">
+        <div class="feature-card">
+          <div class="feature-icon">📚</div>
+          <h3 class="feature-title">55+ Articles</h3>
+          <p class="feature-text">Une collection croissante d'articles biomédicaux de haute qualité provenant de sources fiables.</p>
+        </div>
+      </div>
+      
+      <!-- Feature 2 -->
+      <div class="col-lg-4 col-md-6">
+        <div class="feature-card">
+          <div class="feature-icon">🔍</div>
+          <h3 class="feature-title">Recherche Avancée</h3>
+          <p class="feature-text">Filtrez par domaine, source et mots-clés pour trouver exactement ce que vous cherchez.</p>
+        </div>
+      </div>
+      
+      <!-- Feature 3 -->
+      <div class="col-lg-4 col-md-6">
+        <div class="feature-card">
+          <div class="feature-icon">🏷️</div>
+          <h3 class="feature-title">Données Enrichies</h3>
+          <p class="feature-text">Chaque article inclut auteurs, résumé, tags MeSH et métadonnées complètes.</p>
+        </div>
+      </div>
+      
+      <!-- Feature 4 -->
+      <div class="col-lg-4 col-md-6">
+        <div class="feature-card">
+          <div class="feature-icon">⚡</div>
+          <h3 class="feature-title">Performance</h3>
+          <p class="feature-text">Interface rapide et responsive optimisée pour tous les appareils.</p>
+        </div>
+      </div>
+      
+      <!-- Feature 5 -->
+      <div class="col-lg-4 col-md-6">
+        <div class="feature-card">
+          <div class="feature-icon">🌐</div>
+          <h3 class="feature-title">Multiples Sources</h3>
+          <p class="feature-text">Aggrégation de PubMed, PMC et Semantic Scholar en une seule plateforme.</p>
+        </div>
+      </div>
+      
+      <!-- Feature 6 -->
+      <div class="col-lg-4 col-md-6">
+        <div class="feature-card">
+          <div class="feature-icon">💬</div>
+          <h3 class="feature-title">Feedback</h3>
+          <p class="feature-text">Partagez vos commentaires et aidez-nous à améliorer la plateforme.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS SECTION -->
+<section class="stats-section py-5">
+  <div class="container">
+    <div class="row text-center g-4">
+      <div class="col-md-3 col-6">
+        <div class="stat-box">
+          <div class="stat-number">55+</div>
+          <div class="stat-label">Articles</div>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="stat-box">
+          <div class="stat-number">3</div>
+          <div class="stat-label">Sources</div>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="stat-box">
+          <div class="stat-number">10+</div>
+          <div class="stat-label">Domaines</div>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="stat-box">
+          <div class="stat-number">100%</div>
+          <div class="stat-label">Gratuit</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA SECTION -->
+<section class="cta-section py-5">
+  <div class="container text-center">
+    <h2 class="cta-title">Prêt à commencer ?</h2>
+    <p class="cta-subtitle">Explorez notre collection d'articles scientifiques maintenant</p>
+    <a href="/articles/" class="btn btn-primary btn-lg">Accéder au Corpus</a>
+  </div>
+</section>
+
+{% endblock %}

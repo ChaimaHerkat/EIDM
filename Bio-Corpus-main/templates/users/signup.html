@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}Inscription - Bio-Corpus{% endblock %}
+{% block content %}
+<div class="auth-container">
+  <div class="row justify-content-center align-items-center">
+    <div class="col-md-5 col-lg-4">
+      <div class="auth-card">
+        <div class="auth-header text-center mb-4">
+          <h2 class="auth-title">Créer un compte</h2>
+          <p class="auth-subtitle">Rejoignez Bio-Corpus et explorez des articles scientifiques</p>
+        </div>
+        
+        <form method="post" class="auth-form">{% csrf_token %}
+          {% if form.non_field_errors %}
+            <div class="alert alert-danger">
+              {% for error in form.non_field_errors %}
+                {{ error }}
+              {% endfor %}
+            </div>
+          {% endif %}
+          {% for field in form %}
+            <div class="form-group mb-3">
+              <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+              <input type="{% if 'password' in field.name %}password{% else %}text{% endif %}" name="{{ field.name }}" class="form-control{% if field.errors %} is-invalid{% endif %}" id="{{ field.id_for_label }}" value="{{ field.value|default_if_none:'' }}" {% if field.field.required %}required{% endif %}>
+              {% if field.errors %}
+                <div class="invalid-feedback">
+                  {% for error in field.errors %}
+                    {{ error }}
+                  {% endfor %}
+                </div>
+              {% endif %}
+            </div>
+          {% endfor %}
+          
+          <button type="submit" class="btn btn-primary w-100 btn-auth">S'inscrire</button>
+        </form>
+        
+        <div class="auth-footer text-center mt-4">
+          <p class="mb-0">Déjà inscrit ? <a href="{% url 'users:login' %}" class="auth-link">Se connecter</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

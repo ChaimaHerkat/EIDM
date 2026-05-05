@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+{% block title %}Bio-Corpus | Plateforme Scientifique{% endblock %}
+
+{% block content %}
+<!-- HERO SECTION -->
+<div class="hero">
+  <div class="container">
+    <h1>📚 Bio-Corpus</h1>
+    <p>Plateforme d'indexation intelligente d'articles biomédicaux • {{ stats.total }} articles</p>
+  </div>
+</div>
+
+<!-- STATISTICS -->
+<div class="row mb-4">
+  <div class="col-lg-3 col-md-6 mb-3">
+    <div class="card stats-card">
+      <div class="card-body">
+        <div class="text-muted fw-semibold mb-2">TOTAL ARTICLES</div>
+        <div class="fs-2 fw-bold">{{ stats.total }}</div>
+      </div>
+    </div>
+  </div>
+  {% for s in stats.by_source %}
+  <div class="col-lg-3 col-md-6 mb-3">
+    <div class="card stats-card">
+      <div class="card-body">
+        <div class="text-muted fw-semibold mb-2">{{ s.key|upper }}</div>
+        <div class="fs-2 fw-bold">{{ s.count }}</div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+<!-- FILTER SECTION -->
+<div class="filter-section">
+  <form method="get" class="row g-3">
+    <div class="col-lg-4">
+      <label class="form-label">🔍 Recherche</label>
+      <input class="form-control" name="q" value="{{ current.q }}" placeholder="Titre, résumé, auteurs...">
+    </div>
+    <div class="col-lg-3">
+      <label class="form-label">📂 Domaine</label>
+      <select class="form-select" name="domain">
+        <option value="">Tous les domaines</option>
+        {% for k, v in domains.items %}
+          <option value="{{ k }}" {% if current.domain == k %}selected{% endif %}>{{ v.label }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-lg-3">
+      <label class="form-label">📖 Source</label>
+      <select class="form-select" name="source">
+        <option value="">Toutes les sources</option>
+        <option value="pubmed" {% if current.source == 'pubmed' %}selected{% endif %}>PubMed</option>
+        <option value="pmc" {% if current.source == 'pmc' %}selected{% endif %}>PMC</option>
+        <option value="semantic_scholar" {% if current.source == 'semantic_scholar' %}selected{% endif %}>Semantic Scholar</option>
+      </select>
+    </div>
+    <div class="col-lg-2 d-flex align-items-end">
+      <button type="submit" class="btn btn-primary w-100">Filtrer</button>
+    </div>
+  </form>
+</div>
+
+<!-- ARTICLES LIST -->
+<div class="articles-list">
+  {% if page_obj %}
+    {% for art in page_obj %}
+    <div class="card article-card mb-3">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-start mb-2">
+          <div class="flex-grow-1 pe-3">
+            <h5 class="card-title mb-2">
+              <a href="/articles/{{ art.id }}/" class="text-decoration-none">{{ art.title }}</a>
+            </h5>
+            <div class="text-muted small mb-2">
+              {% if art.journal %}<span class="me-3">📰 {{ art.journal }}</span>{% endif %}
+              {% if art.year %}<span class="me-3">📅 {{ art.year }}</span>{% endif %}
+              {% if art.authors %}<span>✍️ {{ art.authors|first }}</span>{% endif %}
+            </div>
+          </div>
+          <div class="text-end">
+            {% if art.domain %}<span class="badge-domain me-2">{{ art.domain }}</span>{% endif %}
+            <span class="badge-source">{{ art.source }}</span>
+          </div>
+        </div>
+        
+        {% if art.abstract %}
+        <p class="abstract mb-3">{{ art.abstract|truncatewords:50 }}</p>
+        {% endif %}
+        
+        <div class="d-flex justify-content-between align-items-center">
+          <div class="flex-grow-1">
+            {% for term in art.mesh_terms|slice:":4" %}
+              <span class="badge badge-light me-1 mb-1">{{ term }}</span>
+            {% endfor %}
+          </div>
+          <a href="/articles/{{ art.id }}/" class="btn btn-sm btn-outline-primary">Voir plus →</a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  {% else %}
+    <div class="alert alert-info text-center py-4">
+      <h5 class="mb-2">Aucun article trouvé</h5>
+      <p class="mb-0">Essayez avec des critères de recherche différents.</p>
+    </div>
+  {% endif %}
+</div>
+
+<!-- PAGINATION -->
+{% if is_paginated %}
+<nav class="d-flex justify-content-center mt-4 mb-3">
+  <ul class="pagination">
+    {% if page_obj.has_previous %}
+      <li class="page-item">
+        <a class="page-link" href="?page=1{% if current.q %}&q={{ current.q }}{% endif %}{% if current.domain %}&domain={{ current.domain }}{% endif %}{% if current.source %}&source={{ current.source }}{% endif %}">Première</a>
+      </li>
+      <li class="page-item">
+        <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if current.q %}&q={{ current.q }}{% endif %}{% if current.domain %}&domain={{ current.domain }}{% endif %}{% if current.source %}&source={{ current.source }}{% endif %}">Précédente</a>
+      </li>
+    {% endif %}
+
+    <li class="page-item disabled">
+      <span class="page-link">Page {{ page_obj.number }} sur {{ page_obj.paginator.num_pages }}</span>
+    </li>
+
+    {% if page_obj.has_next %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if current.q %}&q={{ current.q }}{% endif %}{% if current.domain %}&domain={{ current.domain }}{% endif %}{% if current.source %}&source={{ current.source }}{% endif %}">Suivante</a>
+      </li>
+      <li class="page-item">
+        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if current.q %}&q={{ current.q }}{% endif %}{% if current.domain %}&domain={{ current.domain }}{% endif %}{% if current.source %}&source={{ current.source }}{% endif %}">Dernière</a>
+      </li>
+    {% endif %}
+  </ul>
+</nav>
+{% endif %}
+
+{% endblock %}
